@@ -1,9 +1,6 @@
 package com.ms.magasinbe.controllers;
 
 import com.ms.magasinbe.common.utils.RestAPIResponse;
-import com.ms.magasinbe.common.utils.UniqueID;
-import com.ms.magasinbe.common.utils.Validator;
-import com.ms.magasinbe.configs.emailsender.EmailService;
 import com.ms.magasinbe.controllers.modals.request.EmailOtpRequest;
 import com.ms.magasinbe.controllers.modals.request.EmailRequest;
 import com.ms.magasinbe.services.otp.OtpService;
