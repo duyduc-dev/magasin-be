@@ -8,6 +8,7 @@ import com.ms.magasinbe.common.utils.RestAPIStatus;
 import com.ms.magasinbe.common.utils.Validator;
 import com.ms.magasinbe.configs.security.JwtService;
 import com.ms.magasinbe.controllers.modals.request.LoginRequest;
+import com.ms.magasinbe.controllers.modals.request.PhoneNumberRequest;
 import com.ms.magasinbe.controllers.modals.request.SignupRequest;
 import com.ms.magasinbe.controllers.modals.response.TokenResponse;
 import com.ms.magasinbe.entities.Role;
@@ -94,6 +95,17 @@ public class AuthServiceImpl implements AuthService {
   @Override
   public User getAuthUser(String userId) {
     return userService.getUserById(userId);
+  }
+
+  /**
+   * @param phoneNumberRequest
+   * @return
+   */
+  @Override
+  public void checkPhoneNumberSignup(PhoneNumberRequest phoneNumberRequest) {
+    Validator.validatePhoneNumber(phoneNumberRequest.getPhoneNumber().trim());
+    User user = userRepository.findFirstByPhoneNumberAndStatus(phoneNumberRequest.getPhoneNumber().trim(), SystemStatus.ACTIVE);
+    Validator.mustNull(user, RestAPIStatus.EXISTED, "Phone Number already existed");
   }
 
 

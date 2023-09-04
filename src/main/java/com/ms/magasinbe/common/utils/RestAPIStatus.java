@@ -4,6 +4,8 @@ public enum RestAPIStatus {
     OK(200, "OK"),
     NO_RESULT(201, "No more result."),
     FAIL(202, "Fail"),
+
+    NON_AUTHORITATIVE_INFORMATION(203, ""),
     BAD_REQUEST(400, "Bad request"),
     UNAUTHORIZED(401, "Unauthorized or Access Token is expired"),
     INVALID_AUTHENTICATE_CREDENTIAL(402, "Invalid authenticated credential"),

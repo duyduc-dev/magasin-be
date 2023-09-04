@@ -4,7 +4,7 @@ public interface ParamError {
     String FIELD_NAME = "{fieldName} is ${validatedValue == null ? 'null' : 'empty'}";
 
     String MAX_LENGTH = "Maximum length {fieldName} is {max} characters";
-    String MIN_LENGTH = "Maximum length {fieldName} is {min} characters";
+    String MIN_LENGTH = "Minimum length {fieldName} is {min} characters";
 
     String MIN_VALUE = "Minimum {fieldName} is {value}";
 

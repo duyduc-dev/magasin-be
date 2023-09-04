@@ -27,8 +27,8 @@ public interface ApiPath {
   String SIGN_UP = "/sign-up";
   String RESET_PASSWORD = "/reset-password";
   String AuthInFo = "/auth-info";
-  String VERIFY_EMAIL_OTP = "/verify-email-otp";
-  String SEND_OTP = "/send-otp";
+  String CHECK_PHONE_NUMBER_SIGNUP = "/check-phone-signup";
+
 
   // User APIs
   String REFERRAL = "/referral";
@@ -37,6 +37,8 @@ public interface ApiPath {
   String CHANGE_PASSWORD = "/change-password";
   String LOYALTY = "/loyalty";
   String MEMBER = "/member";
+
+
 
   // OTP API
   String SEND_OTP_EMAIL_SIGNUP = "/send-otp-email-signup";

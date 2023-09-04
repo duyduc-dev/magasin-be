@@ -4,7 +4,9 @@ import com.ms.magasinbe.common.enums.SystemStatus;
 import com.ms.magasinbe.entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface UserRepository extends JpaRepository<User, String>, JpaSpecificationExecutor<User> {
   User findFirstByEmailAndStatus(String email, SystemStatus systemStatus);
 

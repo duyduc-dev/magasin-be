@@ -6,6 +6,7 @@ import com.ms.magasinbe.configs.security.AuthSession;
 import com.ms.magasinbe.configs.security.AuthUser;
 import com.ms.magasinbe.configs.security.AuthorizeValidator;
 import com.ms.magasinbe.controllers.modals.request.LoginRequest;
+import com.ms.magasinbe.controllers.modals.request.PhoneNumberRequest;
 import com.ms.magasinbe.controllers.modals.request.SignupRequest;
 import com.ms.magasinbe.services.auth.AuthService;
 import com.ms.magasinbe.services.user.UserService;
@@ -36,6 +37,17 @@ public class AuthenticateController extends AbstractBaseController {
   @PostMapping(ApiPath.LOGIN)
   public ResponseEntity<RestAPIResponse<Object>> login(@Valid @RequestBody LoginRequest loginRequest) {
     return responseUtil.successResponse(authService.loginAccount(loginRequest, UserRole.CUSTOMER));
+  }
+
+  @PostMapping(ApiPath.CHECK_PHONE_NUMBER_SIGNUP)
+  public ResponseEntity<RestAPIResponse<Object>> checkPhoneSignup(@Valid @RequestBody PhoneNumberRequest phoneNumberRequest) {
+    authService.checkPhoneNumberSignup(phoneNumberRequest);
+    return responseUtil.successResponse("ok");
+  }
+
+  @PostMapping(ApiPath.LOGOUT)
+  public ResponseEntity<RestAPIResponse<Object>> logout() {
+    return responseUtil.successResponse("ok");
   }
 
   @AuthorizeValidator({ UserRole.CUSTOMER })

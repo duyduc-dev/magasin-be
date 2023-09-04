@@ -50,12 +50,10 @@ public class OtpServiceImpl implements OtpService {
   public void verifyOtpEmail(EmailOtpRequest emailOtpRequest) {
     Validator.validateEmail(emailOtpRequest.getEmail());
     Otp otp = null;
-    otp = otpRepository.findByKeyAndOtpAndStatus(emailOtpRequest.getEmail(), emailOtpRequest.getOtp(), SystemStatus.IN_ACTIVE);
+    otp = otpRepository.findKeyAndOtpAndStatusLatest(emailOtpRequest.getEmail(), emailOtpRequest.getOtp(), SystemStatus.IN_ACTIVE);
     Validator.mustNull(otp, RestAPIStatus.FAIL, "OTP cannot be used anymore");
-    otp = otpRepository.findByKeyAndStatus(emailOtpRequest.getEmail(), SystemStatus.ACTIVE);
+    otp = otpRepository.findKeyAndStatusLatest(emailOtpRequest.getEmail(), SystemStatus.ACTIVE);
     Validator.notNull(otp, RestAPIStatus.NOT_FOUND, "Email has been received otp not found");
-    otp = otpRepository.findByKeyAndOtpAndStatus(otp.getKey(), emailOtpRequest.getOtp(), SystemStatus.ACTIVE);
-    Validator.notNull(otp, RestAPIStatus.FAIL, "Otp is not correct.");
     if(DateUtil.convertToUTC(new Date()).getTime() >= otp.getExpiredDate()) {
       otp.setStatus(SystemStatus.IN_ACTIVE);
       otpRepository.save(otp);
@@ -70,9 +68,11 @@ public class OtpServiceImpl implements OtpService {
    */
   @Override
   public void verifyOtpEmailSignup(EmailOtpRequest emailOtpRequest) {
-    verifyOtpEmail(emailOtpRequest);
+    Otp otp = otpRepository.findKeyAndOtpAndStatusLatest(emailOtpRequest.getEmail(), emailOtpRequest.getOtp(), SystemStatus.ACTIVE);
+    Validator.notNull(otp, RestAPIStatus.NON_AUTHORITATIVE_INFORMATION, "Otp is not correct.");
     User user = userRepository.findFirstByEmailAndStatus(emailOtpRequest.getEmail(), SystemStatus.ACTIVE);
     Validator.mustNull(user, RestAPIStatus.EXISTED, ParamError.EMAIL_EXISTED);
+    verifyOtpEmail(emailOtpRequest);
   }
 
 

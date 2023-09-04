@@ -51,4 +51,6 @@ public class UserServiceImpl implements UserService {
     Validator.notNull(user, RestAPIStatus.NOT_FOUND, ParamError.USER_NOT_FOUND);
     return user;
   }
+
+
 }

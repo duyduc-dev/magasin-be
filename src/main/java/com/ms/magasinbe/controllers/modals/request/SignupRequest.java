@@ -29,7 +29,6 @@ public class SignupRequest {
   @Size(max = 50, message = ParamError.MAX_LENGTH)
   private String lastName;
 
-  @NotBlank(message = ParamError.FIELD_NAME)
   @Size(max = 50, message = ParamError.MAX_LENGTH)
   private String middleName;
 
