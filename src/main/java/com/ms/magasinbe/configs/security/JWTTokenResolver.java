@@ -49,7 +49,6 @@ public class JWTTokenResolver implements HandlerMethodArgumentResolver {
         throw new ApplicationException(RestAPIStatus.UNAUTHORIZED, e.getMessage());
       }
     }
-    System.out.println(authUser);
     return authUser;
 
   }
