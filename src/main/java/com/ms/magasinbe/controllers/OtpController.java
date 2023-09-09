@@ -31,4 +31,15 @@ public class OtpController extends AbstractBaseController {
     return responseUtil.successResponse("ok");
   }
 
+  @PostMapping(ApiPath.SEND_OTP_EMAIL)
+  public ResponseEntity<RestAPIResponse<Object>> sendOtp(@Valid @RequestBody EmailRequest emailRequest) {
+    otpService.SendOtp(emailRequest);
+    return responseUtil.successResponse("ok");
+  }
+
+  @PostMapping(ApiPath.VERIFY_OTP)
+  public ResponseEntity<RestAPIResponse<Object>> verifyOtp(@Valid @RequestBody EmailOtpRequest emailOtpRequest) {
+    return responseUtil.successResponse(otpService.verifyOtp(emailOtpRequest));
+  }
+
 }

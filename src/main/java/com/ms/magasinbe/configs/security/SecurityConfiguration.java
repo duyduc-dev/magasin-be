@@ -91,6 +91,10 @@ public class SecurityConfiguration {
             .permitAll()
             .requestMatchers(ApiPath.OTP_API + ApiPath.VERIFY_OTP_EMAIL_SIGNUP)
             .permitAll()
+            .requestMatchers(ApiPath.OTP_API + ApiPath.SEND_OTP_EMAIL)
+            .permitAll()
+            .requestMatchers(ApiPath.OTP_API + ApiPath.VERIFY_OTP)
+            .permitAll()
 
             .anyRequest()
             .authenticated())

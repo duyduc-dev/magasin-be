@@ -6,6 +6,7 @@ import com.ms.magasinbe.common.utils.*;
 import com.ms.magasinbe.configs.emailsender.EmailService;
 import com.ms.magasinbe.controllers.modals.request.EmailOtpRequest;
 import com.ms.magasinbe.controllers.modals.request.EmailRequest;
+import com.ms.magasinbe.controllers.modals.response.ActiveCodeResponse;
 import com.ms.magasinbe.entities.Otp;
 import com.ms.magasinbe.entities.User;
 import com.ms.magasinbe.repositories.OtpRepository;
@@ -51,13 +52,13 @@ public class OtpServiceImpl implements OtpService {
     Validator.validateEmail(emailOtpRequest.getEmail());
     Otp otp = null;
     otp = otpRepository.findKeyAndOtpAndStatusLatest(emailOtpRequest.getEmail(), emailOtpRequest.getOtp(), SystemStatus.IN_ACTIVE);
-    Validator.mustNull(otp, RestAPIStatus.FAIL, "OTP cannot be used anymore");
+    Validator.mustNull(otp, RestAPIStatus.FAIL, ConstantData.OTP_CANNOT_BE_USED_ANYMORE);
     otp = otpRepository.findKeyAndStatusLatest(emailOtpRequest.getEmail(), SystemStatus.ACTIVE);
-    Validator.notNull(otp, RestAPIStatus.NOT_FOUND, "Email has been received otp not found");
+    Validator.notNull(otp, RestAPIStatus.NOT_FOUND, ConstantData.EMAIL_HAS_BEEN_RECEIVED_OTP_NOTFOUND);
     if(DateUtil.convertToUTC(new Date()).getTime() >= otp.getExpiredDate()) {
       otp.setStatus(SystemStatus.IN_ACTIVE);
       otpRepository.save(otp);
-      throw new ApplicationException(RestAPIStatus.EXPIRED, "OTP has expired");
+      throw new ApplicationException(RestAPIStatus.EXPIRED, ConstantData.OTP_HAS_EXPIRED, ParamError.OTP_HAS_EXPIRED);
     }
     otp.setStatus(SystemStatus.IN_ACTIVE);
     otpRepository.save(otp);
@@ -69,11 +70,55 @@ public class OtpServiceImpl implements OtpService {
   @Override
   public void verifyOtpEmailSignup(EmailOtpRequest emailOtpRequest) {
     Otp otp = otpRepository.findKeyAndOtpAndStatusLatest(emailOtpRequest.getEmail(), emailOtpRequest.getOtp(), SystemStatus.ACTIVE);
-    Validator.notNull(otp, RestAPIStatus.NON_AUTHORITATIVE_INFORMATION, "Otp is not correct.");
+    Validator.notNull(otp, RestAPIStatus.NON_AUTHORITATIVE_INFORMATION, ConstantData.OTP_IS_INCORRECT);
     User user = userRepository.findFirstByEmailAndStatus(emailOtpRequest.getEmail(), SystemStatus.ACTIVE);
     Validator.mustNull(user, RestAPIStatus.EXISTED, ParamError.EMAIL_EXISTED);
     verifyOtpEmail(emailOtpRequest);
   }
 
+  /**
+   * @param emailRequest
+   */
+  @Override
+  public void SendOtp(EmailRequest emailRequest) {
+    Validator.validateEmail(emailRequest.getEmail());
+    User user = userRepository.findFirstByEmailAndStatus(emailRequest.getEmail(), SystemStatus.ACTIVE);
+    Validator.notNull(user, RestAPIStatus.NOT_FOUND, ConstantData.USER_NOT_FOUND, ParamError.USER_NOT_FOUND);
+    String otpStr = UniqueID.getRandomOTP();
+    user.setOtpCode(otpStr);
+    user.setOtpExpiryDate(DateUtil.convertToUTC(new Date()).getTime() + Constant.MINUTE);
+    userRepository.save(user);
+    emailService.sendOtp(user.getEmail(), user.getOtpCode());
+  }
+
+  /**
+   * @param emailOtpRequest
+   */
+  @Override
+  public ActiveCodeResponse verifyOtp(EmailOtpRequest emailOtpRequest) {
+    Validator.validateEmail(emailOtpRequest.getEmail());
+    User user = userRepository.findFirstByEmailAndStatus(emailOtpRequest.getEmail(), SystemStatus.ACTIVE);
+    Validator.notNull(user, RestAPIStatus.NOT_FOUND, ConstantData.USER_NOT_FOUND, ParamError.USER_NOT_FOUND);
+    if(user.getOtpCode().equals(emailOtpRequest.getOtp())) {
+      if(DateUtil.convertToUTC(new Date()).getTime() >= user.getOtpExpiryDate()) {
+        user.setOtpCode(null);
+        user.setOtpExpiryDate(0);
+        userRepository.save(user);
+        throw new ApplicationException(RestAPIStatus.EXPIRED, ConstantData.OTP_HAS_EXPIRED, ParamError.OTP_HAS_EXPIRED);
+      }
+    } else {
+      throw new ApplicationException(RestAPIStatus.NON_AUTHORITATIVE_INFORMATION, ConstantData.OTP_IS_INCORRECT, ParamError.VERIFY_OTP);
+    }
+    user.setOtpCode(null);
+    user.setOtpExpiryDate(0);
+    user.setActiveCode(UniqueID.getUUID());
+    user.setExpiryDate(DateUtil.convertToUTC(new Date()).getTime() + Constant.MINUTE);
+    user = userRepository.save(user);
+
+    return ActiveCodeResponse.builder()
+            .activeCode(user.getActiveCode())
+            .codeExpired(user.getExpiryDate())
+            .build();
+  }
 
 }

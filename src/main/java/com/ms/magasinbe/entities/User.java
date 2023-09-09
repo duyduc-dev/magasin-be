@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ms.magasinbe.common.enums.GenderType;
 import com.ms.magasinbe.common.enums.SystemStatus;
+import com.ms.magasinbe.common.enums.TypeVerifyAccount;
 import com.ms.magasinbe.common.enums.UserRole;
 import jakarta.persistence.*;
 import lombok.*;
@@ -88,4 +89,5 @@ public class User extends BaseEntity implements Serializable {
 
     @Column(name = "is_2_Fa", nullable = false, columnDefinition = "tinyint(1) default 0")
     private boolean is2Fa;
+
 }

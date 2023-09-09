@@ -25,7 +25,7 @@ public interface ApiPath {
   String LOGIN = "/login";
   String LOGOUT = "/logout";
   String SIGN_UP = "/sign-up";
-  String RESET_PASSWORD = "/reset-password";
+  String RESET_PASSWORD = "/reset-password/{active-code}";
   String AuthInFo = "/auth-info";
   String CHECK_PHONE_NUMBER_SIGNUP = "/check-phone-signup";
 
@@ -43,4 +43,6 @@ public interface ApiPath {
   // OTP API
   String SEND_OTP_EMAIL_SIGNUP = "/send-otp-email-signup";
   String VERIFY_OTP_EMAIL_SIGNUP = "/verify-otp-email-signup";
+  String SEND_OTP_EMAIL = "/send-otp";
+  String VERIFY_OTP = "/verify-otp";
 }

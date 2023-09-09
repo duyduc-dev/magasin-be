@@ -83,6 +83,12 @@ public class Validator {
         }
     }
 
+    public static void notNull(Object obj, RestAPIStatus RestAPIStatus, Object data, String message) {
+        if (obj == null) {
+            throw new ApplicationException(RestAPIStatus,data, message);
+        }
+    }
+
     /**
      * Validate list object not null & not empty
      *
@@ -136,6 +142,20 @@ public class Validator {
     public static void mustEquals(String str1, String str2, RestAPIStatus RestAPIStatus, String message) {
         if (!str1.equals(str2)) {
             throw new ApplicationException(RestAPIStatus, message);
+
+        }
+    }
+    /**
+     * Validate a string must equal with another string
+     *
+     * @param str1
+     * @param str2
+     * @param RestAPIStatus
+     * @param message
+     */
+    public static void mustEquals(String str1, String str2, RestAPIStatus RestAPIStatus,String data, String message) {
+        if (!str1.equals(str2)) {
+            throw new ApplicationException(RestAPIStatus,data, message);
 
         }
     }
@@ -210,7 +230,7 @@ public class Validator {
     public static void validateEmail(String emailAddress) {
         boolean isEmailFormat = isEmailFormat(emailAddress);
         if (!isEmailFormat) {
-            throw new ApplicationException(RestAPIStatus.ERR_INVALID_EMAIL_FORMAT);
+            throw new ApplicationException(RestAPIStatus.ERR_INVALID_EMAIL_FORMAT, ConstantData.INVALID_EMAIL_FORMAT, ParamError.INVALID_EMAIL_FORMAT);
         }
     }
 

@@ -1,6 +1,7 @@
 package com.ms.magasinbe.services.user;
 
 import com.ms.magasinbe.common.enums.SystemStatus;
+import com.ms.magasinbe.common.enums.TypeVerifyAccount;
 import com.ms.magasinbe.common.enums.UserRole;
 import com.ms.magasinbe.common.utils.*;
 import com.ms.magasinbe.controllers.modals.request.SignupRequest;
@@ -48,7 +49,7 @@ public class UserServiceImpl implements UserService {
   @Override
   public User getUserById(String id) {
     User user = userRepository.findByIdAndStatus(id, SystemStatus.ACTIVE);
-    Validator.notNull(user, RestAPIStatus.NOT_FOUND, ParamError.USER_NOT_FOUND);
+    Validator.notNull(user, RestAPIStatus.NOT_FOUND, ConstantData.USER_NOT_FOUND, ParamError.USER_NOT_FOUND);
     return user;
   }
 

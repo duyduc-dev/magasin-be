@@ -28,7 +28,9 @@ public interface ParamError {
     String EMAIL_OR_PHONE_EMPTY = "Please input your email or phone number!";
     String EMAIL_PASS_INVALID = "Email or Password invalid";
     String PASSWORD_NOT_MATCH = "New Password and Confirm Password not match";
+    String CANNOT_FORGOT_PASSWORD = "You do not have permission to change your password";
     String CHANGE_PASSWORD_EXPIRED = "Time change password is expired";
+    String FORGOT_PASSWORD_EXPIRED = "Time forgot password is expired";
     // holder
     String HOLDER_NOT_FOUND = "Holder not found";
     String HOLDER_CREATED_CARD = "Holder created card";
@@ -69,4 +71,6 @@ public interface ParamError {
 
     // Token
     String TOKEN_NOT_FOUND = "Token not found.";
+    String OTP_HAS_EXPIRED = "Otp has expired";
+    String INVALID_EMAIL_FORMAT = "Invalid email format";
 }

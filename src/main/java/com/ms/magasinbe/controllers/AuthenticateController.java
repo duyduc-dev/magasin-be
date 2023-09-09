@@ -5,6 +5,7 @@ import com.ms.magasinbe.common.utils.RestAPIResponse;
 import com.ms.magasinbe.configs.security.AuthSession;
 import com.ms.magasinbe.configs.security.AuthUser;
 import com.ms.magasinbe.configs.security.AuthorizeValidator;
+import com.ms.magasinbe.controllers.modals.request.ForgotPasswordRequest;
 import com.ms.magasinbe.controllers.modals.request.LoginRequest;
 import com.ms.magasinbe.controllers.modals.request.PhoneNumberRequest;
 import com.ms.magasinbe.controllers.modals.request.SignupRequest;
@@ -54,6 +55,14 @@ public class AuthenticateController extends AbstractBaseController {
   @GetMapping(ApiPath.AuthInFo)
   public ResponseEntity<RestAPIResponse<Object>> getInfo(@AuthSession AuthUser authUser) {
     return responseUtil.successResponse(authService.getAuthUser(authUser.getId()));
+  }
+
+  @PatchMapping(ApiPath.RESET_PASSWORD)
+  public ResponseEntity<RestAPIResponse<Object>> resetPassword(
+          @PathVariable("active-code") String activeCode,
+          @Valid @RequestBody ForgotPasswordRequest forgotPasswordRequest
+  ) {
+    return responseUtil.successResponse(authService.forgotPassword(activeCode, forgotPasswordRequest));
   }
 
 }

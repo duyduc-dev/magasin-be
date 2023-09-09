@@ -26,6 +26,12 @@ public class ApplicationException extends RuntimeException {
         this.data = data;
     }
 
+    public ApplicationException(RestAPIStatus apiStatus, Object data, String message) {
+        super(message);
+        this.apiStatus = apiStatus;
+        this.data = data;
+    }
+
     public ApplicationException(Throwable cause) {
         super(cause);
     }

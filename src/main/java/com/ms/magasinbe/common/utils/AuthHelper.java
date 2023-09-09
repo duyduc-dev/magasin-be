@@ -16,8 +16,16 @@ public class AuthHelper {
     return passwordEncoder.matches(
             passwordHash.trim().concat(user.getPasswordSalt()), user.getPasswordHash());
   }
-
   public String generatePasswordHash(String passwordHash, User user) {
     return passwordEncoder.encode(passwordHash.trim().concat(user.getPasswordSalt()));
+  }
+
+  public PasswordHash createPasswordHash(String passwordHashReq) {
+    String passwordSalt = AppUtil.generateSalt();
+    String passwordHash = passwordEncoder.encode(passwordHashReq.trim().concat(passwordSalt));
+    return PasswordHash.builder()
+            .passwordHash(passwordHash)
+            .passwordSalt(passwordSalt)
+            .build();
   }
 }
